@@ -70,15 +70,21 @@ public class ThreadServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String threadId = request.getParameter("threadId");
-        String userId = request.getParameter("userId");
         String content = request.getParameter("content");
+
+        //Always take userId from session
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("user_id");
+        if (userId == null) {
+            throw new ServletException("ログインしていません。");
+        }
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASS)) {
             String sql = "INSERT INTO posts (post_id, thread_id, user_id, post_number, post_content, post_date) " +
-                         "VALUES (SEQ_POSTS.NEXTVAL, ?, ?, (SELECT NVL(MAX(post_number),0)+1 FROM posts WHERE thread_id=?), ?, SYSDATE)";
+                    "VALUES (SEQ_POSTS.NEXTVAL, ?, ?, (SELECT NVL(MAX(post_number),0)+1 FROM posts WHERE thread_id=?), ?, SYSDATE)";
             try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setString(1, threadId);
-                ps.setString(2, userId);
+                ps.setInt(2, userId);
                 ps.setString(3, threadId);
                 ps.setString(4, content);
                 ps.executeUpdate();

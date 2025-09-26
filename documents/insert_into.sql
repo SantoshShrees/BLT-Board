@@ -49,19 +49,5 @@ VALUES (9, 3, 1, 4, '羊ってオス？メス？', sysdate);
 INSERT INTO POSTS (post_id, thread_id, user_id, post_number, post_content, post_date)
 VALUES (10, 3, 1, 5, '子羊美味しいよね！', sysdate);
 
---COMMENTS
-INSERT INTO COMMENTS (comment_id, post_id, user_id, content, comment_date)
-VALUES (1, 1, 1, 'hahahha', sysdate);
-
-INSERT INTO COMMENTS (comment_id, post_id, user_id, content, comment_date)
-VALUES (1, 3, 2, 'いいね', sysdate);
-
-INSERT INTO COMMENTS (comment_id, post_id, user_id, content, comment_date)
-VALUES (1, 4, 3, '素晴らしいですね', sysdate);
-
-INSERT INTO COMMENTS (comment_id, post_id, user_id, content, comment_date)
-VALUES (1, 2, 3, 'エ。。。びっくり', sysdate);
-
-INSERT INTO COMMENTS (comment_id, post_id, user_id, content, comment_date)
-VALUES (1, 10, 1, 'あああああ。。。なるほど', sysdate);
+commit;
 

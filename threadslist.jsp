@@ -12,19 +12,21 @@
     <h3>スレッド一覧</h3>
     <ul>
         <c:forEach var="thread" items="${threads}">
-            <li>
-                <a href="ThreadServlet?thread_id=${thread.id}">
-                    ${thread.title}
-                </a>
-            </li>
+        <li>
+            [${thread.id}]
+            <a href="ThreadServlet?thread_id=${thread.id}">
+            ${thread.title}
+            </a>
+        </li>
         </c:forEach>
     </ul>
+
 
     <h3>新しいスレッド作成</h3>
     <form action="CreateThreadServlet" method="post">
         タイトル: <input type="text" name="title" required><br>
-        最初の投稿: <textarea name="content" required></textarea><br>
         <input type="submit" value="作成">
     </form>
+    <p><a href="login.jsp">LOG IN へ戻る</a></p>
 </body>
 </html>

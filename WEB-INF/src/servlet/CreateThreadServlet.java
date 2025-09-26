@@ -18,7 +18,13 @@ public class CreateThreadServlet extends HttpServlet {
 
         String title = request.getParameter("title");
         String content = request.getParameter("content");
-        String userId = request.getParameter("userId");
+
+        // ✅ Always take userId from session
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("user_id");
+        if (userId == null) {
+            throw new ServletException("ログインしていません。");
+        }
 
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -32,14 +38,15 @@ public class CreateThreadServlet extends HttpServlet {
 
                 // Insert first post
                 String sql2 = "INSERT INTO POSTS (post_id, thread_id, user_id, post_number, post_content, post_date) " +
-                              "VALUES (SEQ_POSTS.NEXTVAL, SEQ_THREADS.CURRVAL, ?, 1, ?, SYSDATE)";
+                        "VALUES (SEQ_POSTS.NEXTVAL, SEQ_THREADS.CURRVAL, ?, 1, ?, SYSDATE)";
                 PreparedStatement ps2 = con.prepareStatement(sql2);
-                ps2.setString(1, userId);
+                ps2.setInt(1, userId);
                 ps2.setString(2, content);
                 ps2.executeUpdate();
             }
 
-            response.sendRedirect("threadslist.jsp");
+            // ✅ Better: redirect to thread list servlet
+            response.sendRedirect("ThreadListServlet");
 
         } catch (Exception e) {
             throw new ServletException(e);

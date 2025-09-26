@@ -38,6 +38,16 @@
     </servlet-mapping>
 
     <servlet>
+  <servlet-name>ThreadListServlet</servlet-name>
+  <servlet-class>servlet.ThreadListServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>ThreadListServlet</servlet-name>
+  <url-pattern>/ThreadListServlet</url-pattern>
+</servlet-mapping>
+
+
+    <servlet>
         <servlet-name>PostServlet</servlet-name>
         <servlet-class>servlet.PostServlet</servlet-class>
     </servlet>

@@ -12,7 +12,6 @@ public class PostServlet extends HttpServlet {
     private static final String USER = "bbs11";
     private static final String PASS = "luck";
 
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -25,7 +24,7 @@ public class PostServlet extends HttpServlet {
 
             try (Connection con = DriverManager.getConnection(URL, USER, PASS)) {
                 String sql = "INSERT INTO COMMENTS (comment_id, post_id, user_id, content, created_at) " +
-                             "VALUES (SEQ_COMMENTS.NEXTVAL, ?, ?, ?, SYSDATE)";
+                                "VALUES (SEQ_COMMENTS.NEXTVAL, ?, ?, ?, SYSDATE)";
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setString(1, postId);
                 ps.setString(2, userId);
