@@ -17,7 +17,7 @@ public class ThreadListServlet extends HttpServlet {
         try (Connection con = DriverManager.getConnection(URL, USER, PASS)) {
             String sql = "SELECT thread_id, thread_title FROM threads ORDER BY thread_id";
             try (PreparedStatement ps = con.prepareStatement(sql);
-                 ResultSet rs = ps.executeQuery()) {
+            ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Map<String,Object> row = new HashMap<>();
                     row.put("id", rs.getInt("thread_id"));
