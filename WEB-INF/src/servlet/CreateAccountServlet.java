@@ -1,39 +1,35 @@
 package servlet;
 
+import dao.Db;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class CreateAccountServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
-    private static final String URL = "jdbc:oracle:thin:@//localhost:1521/orcl";
-    private static final String USER = "bbs11";
-    private static final String PASS = "luck";
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
 
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+        try (Connection cn = Db.getConnection()) {
+            String sql = "INSERT INTO USERS (user_id, user_name, user_pass) VALUES (SEQ_USERS.NEXTVAL, ?, ?)";
+            PreparedStatement stmt = cn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.executeUpdate();
 
-            try (Connection con = DriverManager.getConnection(URL, USER, PASS)) {
-                String sql = "INSERT INTO USERS (user_id, user_name, user_pass) VALUES (SEQ_USERS.NEXTVAL, ?, ?)";
-                PreparedStatement ps = con.prepareStatement(sql);
-                ps.setString(1, username);
-                ps.setString(2, password);
-                ps.executeUpdate();
-            }
+            // 成功したらログインページへ
+            res.sendRedirect("login.jsp");
 
-            response.sendRedirect("login.jsp");
-
-        } catch (Exception e) {
-            throw new ServletException(e);
+        } catch (SQLException e) {
+            throw new ServletException("ユーザー登録中にエラーが発生しました。", e);
         }
     }
 }

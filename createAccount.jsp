@@ -12,8 +12,5 @@
         パスワード: <input type="password" name="password"><br>
         <input type="submit" value="登録">
     </form>
-    <form action="login.jsp" method="get">
-        <button type="submit">戻る</button>
-    </form>
 </body>
 </html>
