@@ -12,14 +12,13 @@ public class CreateThreadServlet extends HttpServlet {
     private static final String USER = "bbs11";
     private static final String PASS = "luck";
 
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String title = request.getParameter("title");
         String content = request.getParameter("content");
 
-        // ✅ Always take userId from session
+        // Always take userId from session
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("user_id");
         if (userId == null) {
@@ -45,7 +44,7 @@ public class CreateThreadServlet extends HttpServlet {
                 ps2.executeUpdate();
             }
 
-            // ✅ Better: redirect to thread list servlet
+            // Better: redirect to thread list servlet
             response.sendRedirect("ThreadListServlet");
 
         } catch (Exception e) {

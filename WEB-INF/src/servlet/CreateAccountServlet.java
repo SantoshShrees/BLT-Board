@@ -30,11 +30,10 @@ public class CreateAccountServlet extends HttpServlet {
         }
         try (Connection cn = Db.getConnection()) {
 
-            //Check if username and password already exists
-            String check = "SELECT COUNT(*) FROM USERS WHERE user_name = ? and user_pass = ?";
+            //Check if username already exists
+            String check = "SELECT COUNT(*) FROM USERS WHERE user_name = ?";
             try (PreparedStatement checkStmt = cn.prepareStatement(check)) {
                 checkStmt.setString(1, username);
-                checkStmt.setString(2,password);
                 ResultSet rs = checkStmt.executeQuery();
                 rs.next();
                 int count = rs.getInt(1);
@@ -56,11 +55,18 @@ public class CreateAccountServlet extends HttpServlet {
             }
 
             //Succesfully signedup and get the message
-            req.setAttribute("success", "新規登録が完了しました。ログインペーににしてください。");
+            req.setAttribute("success", "新規登録が完了しました。ログインページにしてください。");
             RequestDispatcher rd = req.getRequestDispatcher("createAccount.jsp");
             rd.forward(req, res);
+
         } catch (SQLException e) {
-            throw new ServletException("ユーザー登録中にエラーが発生しました。", e);
+            if (e.getMessage().contains("ORA-00001")) {
+                req.setAttribute("error", "このユーザー名はすでに使われています。");
+                RequestDispatcher rd = req.getRequestDispatcher("createAccount.jsp");
+                rd.forward(req, res);
+            } else {
+                throw new ServletException("ユーザー登録中にエラーが発生しました。", e);
+            }
         }
     }
 }
