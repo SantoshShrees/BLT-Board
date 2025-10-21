@@ -1,0 +1,129 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #f8f6f3; /* soft milk background */
+    color: #4b3f35;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* outer container */
+.container {
+    position: relative;
+    width: 750px;
+    height: 450px;
+    border: 2px solid #f3d8b6;
+    box-shadow: 0 0 25px rgba(245, 196, 140, 0.6);
+    overflow: hidden;
+    border-radius: 15px;
+    display: flex;
+}
+
+/* left welcome side */
+.welcome-box {
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(135deg, #fffaf3, #fdeedb);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #6a4a2d;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.welcome-box h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #e28a3b;
+    text-shadow: 0 0 10px rgba(245, 196, 140, 0.4);
+}
+
+.welcome-box p {
+    font-size: 15px;
+    color: #7a6145;
+}
+
+/* right form side */
+.form-box {
+    width: 50%;
+    height: 100%;
+    background: #fffdf9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+}
+
+/* title */
+.form-box h2 {
+    font-size: 26px;
+    color: #6a4a2d;
+    margin-bottom: 15px;
+}
+
+/* input fields */
+.input-box {
+    position: relative;
+    width: 80%;
+    height: 50px;
+    margin-top: 25px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #4b3f35;
+    font-weight: 600;
+    border-bottom: 2px solid #f4b183;
+    padding-right: 23px;
+    transition: 0.5s;
+}
+
+.input-box input:focus {
+    border-bottom-color: #f7c299;
+}
+
+/* button */
+.btn {
+    margin-top: 25px;
+    display: inline-block;
+    background: #f4b183;
+    color: #fff;
+    padding: 10px 25px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    background: #f7c299;
+    box-shadow: 0 0 10px rgba(244, 177, 131, 0.6);
+}
+
+/* error message */
+.error {
+    color: #d9534f;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+/* soft glow */
+.container:hover {
+    box-shadow: 0 0 35px rgba(245, 196, 140, 0.8);
+    transition: box-shadow 0.4s ease;
+}

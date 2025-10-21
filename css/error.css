@@ -1,0 +1,70 @@
+/* Soft milk base */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: #f8f6f3;
+    color: #4b3f35;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card */
+.container {
+    width: clamp(360px, 80vw, 560px);
+    padding: clamp(18px, 4vw, 28px);
+    border: 2px solid #f3d8b6;
+    border-radius: 14px;
+    background: #fffdf9;
+    box-shadow: 0 0 25px rgba(245,196,140,.6);
+    text-align: center;
+}
+
+/* Icon + heading */
+.icon {
+    width: 48px; height: 48px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    background: #ffe6d3;
+    color: #e28a3b;
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 24px;
+    box-shadow: 0 0 10px rgba(244,177,131,.4) inset;
+}
+h2 {
+    margin: 8px 0 6px;
+    font-size: clamp(20px, 3.2vw, 26px);
+    color: #6a4a2d;
+}
+
+/* Message */
+.msg {
+    margin: 6px 0 16px;
+    font-size: clamp(14px, 2.4vw, 16px);
+}
+
+/* Button */
+.btn {
+    display: inline-block;
+    min-width: 200px;
+    padding: 10px 22px;
+    background: #f4b183;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 3px 8px rgba(0,0,0,.08);
+    transition: .25s;
+}
+.btn:hover {
+    background: #f7c299;
+    box-shadow: 0 0 10px rgba(244,177,131,.6);
+    transform: translateY(-1px);
+}
+
+/* Subtle hover glow on card */
+.container:hover { box-shadow: 0 0 35px rgba(245,196,140,.8); transition: box-shadow .4s; }

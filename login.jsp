@@ -5,22 +5,40 @@
 <head>
     <meta charset="UTF-8">
     <title>ログインページ</title>
-</head>
+    <link rel="stylesheet" href="css/login_style.css">
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
 <body>
-    <h2>ログイン</h2>
-    <form action="loginServlet" method="post">
-        ユーザー名: <input type="text" name="username" required><br>
-        パスワード: <input type="password" name="password" required><br>
-        <input type="submit" value="ログイン">
-    </form>
+    <div class="container">
+        <!-- Left side welcome panel -->
+        <div class="welcome-box">
+            <h1>BBS11へようこそ！</h1>
+            <p>掲示板システムにログインして交流を始めましょう。</p>
+        </div>
 
-    <c:if test="${not empty error}">
-        <p>${error}</p>
-    </c:if>
+        <!-- Right side login form -->
+        <div class="form-box">
+            <h2>ログイン</h2>
 
-    <hr>
-    <form action="createAccount.jsp" method="get">
-        <button type="submit">新規登録</button>
-    </form>
+            <form action="loginServlet" method="post">
+                <div class="input-box">
+                    <input type="text" name="username" required placeholder="ユーザー名">
+                </div>
+
+                <div class="input-box">
+                    <input type="password" name="password" required placeholder="パスワード">
+                </div>
+
+                <button type="submit" class="btn">ログイン</button>
+
+                <c:if test="${not empty error}">
+                    <p class="error">${error}</p>
+                </c:if>
+            </form>
+
+            <form action="createAccount.jsp" method="get">
+                <button type="submit" class="btn">新規登録</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

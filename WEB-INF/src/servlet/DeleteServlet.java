@@ -15,11 +15,11 @@ public class DeleteServlet extends HttpServlet {
 
         try (Connection cn = Db.getConnection()) {
 
-            //if the request contains post id you can delete post
+            // if the request contains post id you can delete post
             if (req.getParameter("post_id") != null) {
                 int postId = Integer.parseInt(req.getParameter("post_id"));
 
-                //get owner of post
+                // get owner of post
                 String sqlCheck = "SELECT user_id, thread_id FROM POSTS WHERE post_id = ?";
                 int postOwnerId = -1;
                 int threadId = -1;
@@ -35,7 +35,7 @@ public class DeleteServlet extends HttpServlet {
                     }
                 }
 
-                // Check permission if not the owner then get the error message 
+                // Check permission if not the owner then get the error message
                 if (loginUserId != postOwnerId) {
                     session.setAttribute("errorPostId", postId);
                     session.setAttribute("errorMsg", "作成者以外は削除できません。");
@@ -49,16 +49,16 @@ public class DeleteServlet extends HttpServlet {
                     ps.executeUpdate();
                 }
 
-                //redirect to the same thread
+                // redirect to the same thread
                 res.sendRedirect("post?thread_id=" + threadId);
                 return;
             }
 
-            //if the request contains thread id then delete thread
+            // if the request contains thread id then delete thread
             else if (req.getParameter("thread_id") != null) {
                 int threadId = Integer.parseInt(req.getParameter("thread_id"));
 
-                //get who own the thread
+                // get who own the thread
                 String sqlCheck = "SELECT user_id FROM THREADS WHERE thread_id = ?";
                 int threadOwnerId = -1;
 
@@ -80,21 +80,41 @@ public class DeleteServlet extends HttpServlet {
                     return;
                 }
 
-                //delete thread
-                String sqlDeleteThread = "DELETE FROM THREADS WHERE thread_id = ?";
-                try (PreparedStatement ps = cn.prepareStatement(sqlDeleteThread)) {
-                    ps.setInt(1, threadId);
-                    ps.executeUpdate();
+                // 3) transactional delete: POSTS -> THREADS
+                boolean oldAuto = cn.getAutoCommit();
+                cn.setAutoCommit(false);
+                try {
+                    // delete posts in this thread first (to satisfy FK)
+                    try (PreparedStatement ps = cn.prepareStatement(
+                            "DELETE FROM POSTS WHERE thread_id = ?")) {
+                        ps.setInt(1, threadId);
+                        ps.executeUpdate();
+                    }
+
+                    // then delete the thread
+                    int affected;
+                    try (PreparedStatement ps = cn.prepareStatement(
+                            "DELETE FROM THREADS WHERE thread_id = ?")) {
+                        ps.setInt(1, threadId);
+                        affected = ps.executeUpdate();
+                    }
+
+                    // (optional) if nothing deleted, thread disappeared between checks
+                    if (affected == 0) {
+                        cn.rollback();
+                        throw new ServletException("Thread already deleted.");
+                    }
+
+                    cn.commit();
+                } catch (SQLException ex) {
+                    cn.rollback();
+                    throw ex;
+                } finally {
+                    cn.setAutoCommit(oldAuto);
                 }
 
-                //Redirect back to thread list
                 res.sendRedirect("threads");
                 return;
-            }
-
-            //when there is not any id
-            else {
-                throw new ServletException("ID がみつけられないけど。");
             }
 
         } catch (SQLException e) {

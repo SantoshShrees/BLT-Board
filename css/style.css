@@ -1,0 +1,143 @@
+/* Make sizing responsive and keep side-by-side */
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: #f8f6f3;
+    color: #4b3f35;
+    font-family: 'Philosopher','Segoe UI',sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* The card scales with window width/height */
+.container {
+    width: clamp(620px, 90vw, 750px);   /* was fixed 750px */
+    height: clamp(360px, 70vh, 450px);  /* was fixed 450px */
+    display: flex;
+    overflow: hidden;
+    border: 2px solid #f3d8b6;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(245,196,140,.6);
+    background: #fffdf9;
+    /* stay side-by-side at all widths */
+    flex-direction: row;
+}
+
+/* Panels always split 50/50 */
+.left-pane,
+.right-pane,
+.form-box,
+.welcome-box {
+    flex: 1 1 50%;
+    min-width: 0;          /* prevents overflow when narrow */
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Left gradient panel (use for title/welcome) */
+.left-pane,
+.welcome-box {
+    background: linear-gradient(135deg,#fffaf3,#fdeedb);
+    text-align: center;
+    padding: clamp(16px, 3vw, 24px);
+}
+
+/* Right plain panel (use for buttons/form) */
+.right-pane,
+.form-box {
+    background: #fffdf9;
+    flex-direction: column;
+    gap: clamp(10px, 2.2vw, 18px);
+    padding: clamp(16px, 3vw, 30px);
+}
+
+/* Responsive type that scales smoothly */
+.left-pane h1,
+.welcome-box h1 {
+    margin: 0;
+    font-size: clamp(22px, 3.2vw, 30px);
+    color: #e28a3b;
+    text-shadow: 0 0 10px rgba(245,196,140,.4);
+}
+
+.right-pane h2,
+.form-box h2 {
+    margin: 0 0 8px 0;
+    font-size: clamp(18px, 2.6vw, 26px);
+    color: #6a4a2d;
+}
+
+/* Inputs (login page) */
+.input-box {
+    position: relative;
+    width: min(360px, 80%);
+    height: 48px;
+    margin-top: 18px;
+}
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: clamp(14px, 1.8vw, 16px);
+    color: #4b3f35;
+    font-weight: 600;
+    border-bottom: 2px solid #f4b183;
+    padding-right: 18px;
+    transition: .3s;
+}
+.input-box input:focus { border-bottom-color: #f7c299; }
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    min-width: 180px;
+    padding: 10px 22px;
+    text-align: center;
+    background: #f4b183;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: .25s;
+    box-shadow: 0 3px 8px rgba(0,0,0,.08);
+}
+.btn:hover {
+    background: #f7c299;
+    box-shadow: 0 0 10px rgba(244,177,131,.6);
+    transform: translateY(-1px);
+}
+
+/* Optional ghost style button */
+.btn.ghost {
+    background: transparent;
+    color: #6a4a2d;
+    border: 1px solid #f4b183;
+}
+.btn.ghost:hover { background: rgba(244,177,131,.15); }
+
+/* Keep the glow subtle; no layout switch */
+.container:hover {
+    box-shadow: 0 0 35px rgba(245,196,140,.8);
+    transition: box-shadow .4s ease;
+}
+
+/* If you STILL want to stack on very tiny screens, use a smaller breakpoint */
+@media (max-width: 560px) {
+    .container { flex-direction: column; }
+    .left-pane, .right-pane,
+    .welcome-box, .form-box {
+        width: 100%;
+        height: auto;
+    }
+    .btn { width: 100%; }
+}

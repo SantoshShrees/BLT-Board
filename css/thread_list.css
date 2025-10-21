@@ -1,0 +1,263 @@
+/* ===== Soft Milk Base & Tokens ===== */
+:root {
+    --milk: #f8f6f3;
+    --card: #fffdf9;
+    --border: #f3d8b6;
+    --peach: #f4b183;
+    --peach-2: #f7c299;
+    --text: #4b3f35;
+    --accent: #e28a3b;
+    --shadow: 0 0 25px rgba(245, 196, 140, .6);
+
+    --del: #f7b0b0;
+    --del-hover: #ef8e8e;
+    --del-text: #7a1f1f;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--milk);
+    color: var(--text);
+    font-family: 'Philosopher', 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    overflow: hidden;
+    /* No page scroll */
+}
+
+/* ===== Page layout ===== */
+.page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Logout fixed top-right */
+.logout {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1000;
+}
+
+.logout>button {
+    background: var(--peach);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .08);
+    transition: .25s;
+}
+
+.logout>button:hover {
+    background: var(--peach-2);
+    box-shadow: 0 0 10px rgba(244, 177, 131, .6);
+    transform: translateY(-1px);
+}
+
+/* Header (non-scrolling) */
+.page-header {
+    padding: 12px 16px 6px;
+    max-width: clamp(320px, 92vw, 900px);
+    width: 100%;
+    margin: 0 auto;
+}
+
+.page-header h2 {
+    margin: 4px 0;
+    line-height: 1.25;
+    font-size: 20px;
+    color: #6a4a2d;
+}
+
+.page-header h3 {
+    margin: 6px 0 0;
+    font-size: 18px;
+    color: var(--accent);
+}
+
+/* Main area: column with list (scroll) + composer (fixed) */
+.content {
+    max-width: clamp(320px, 92vw, 900px);
+    width: 100%;
+    margin: 0 auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Only this area scrolls ===== */
+.list-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    /* <- the ONLY scrollbar */
+    padding-right: 4px;
+}
+
+/* Thread cards */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 10px;
+}
+
+li {
+    position: relative;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 10px clamp(90px, 18vw, 120px) 10px 12px;
+    /* room for delete on right */
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.num {
+    margin: 0;
+    font-weight: 700;
+    color: #6a4a2d;
+}
+
+.title {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.title:hover {
+    text-decoration: underline;
+}
+
+/* Delete (light red), visible on right */
+li form {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    z-index: 2;
+}
+
+li form[action="delete"] button,
+li form[action="delete"] input[type="submit"] {
+    background: var(--del);
+    color: var(--del-text);
+    border: 1px solid #eaa3a3;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .06);
+    transition: .2s;
+    white-space: nowrap;
+}
+
+li form[action="delete"] button:hover,
+li form[action="delete"] input[type="submit"]:_hover {
+    background: var(--del-hover);
+    box-shadow: 0 0 10px rgba(239, 142, 142, .45);
+    transform: translateY(-1px);
+}
+
+/* Per-thread error */
+.row-error {
+    margin-top: 6px;
+    color: #d9534f;
+}
+
+/* Composer (non-scrolling footer) */
+.composer {
+    padding: 8px 0 10px;
+    background: var(--milk);
+    box-shadow: 0 -10px 20px rgba(245, 196, 140, .15);
+}
+
+.composer>hr {
+    border: none;
+    height: 2px;
+    background: var(--border);
+    margin: 6px 0 8px;
+}
+
+.composer h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    color: var(--accent);
+}
+
+.composer .global-error {
+    margin: 0 0 8px;
+    color: #d9534f;
+}
+
+.composer form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0 0 8px;
+}
+
+.composer input[type="text"] {
+    flex: 1 1 260px;
+    min-width: 220px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid var(--peach);
+    font-size: 16px;
+    color: var(--text);
+    transition: .25s;
+}
+
+.composer input[type="text"]:focus {
+    border-bottom-color: var(--peach-2);
+}
+
+.composer input[type="submit"] {
+    background: var(--peach);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .08);
+    transition: .25s;
+}
+
+.composer input[type="submit"]:hover {
+    background: var(--peach-2);
+    box-shadow: 0 0 10px rgba(244, 177, 131, .6);
+    transform: translateY(-1px);
+}
+
+/* Tiny screens */
+@media (max-width:560px) {
+    li {
+        padding-right: 96px;
+    }
+
+    .composer input[type="submit"] {
+        width: 100%;
+    }
+}
