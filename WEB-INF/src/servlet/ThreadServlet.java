@@ -62,28 +62,17 @@ public class ThreadServlet extends HttpServlet {
 
         try (Connection cn = Db.getConnection()) {
 
-            // === changed: compute next thread_id as MAX+1 ===
-            int newId = 1;
-            String sqlMax = "SELECT NVL(MAX(thread_id), 0) + 1 FROM THREADS";
-            try (PreparedStatement psMax = cn.prepareStatement(sqlMax);
-                ResultSet rs = psMax.executeQuery()) {
-                if (rs.next()) {
-                    newId = rs.getInt(1);
-                }
-            }
-
-            // === changed: insert using the computed thread_id (no NEXTVAL) ===
-            String sql = "INSERT INTO THREADS (thread_id, thread_title, user_id) VALUES (?, ?, ?)";
-            try (PreparedStatement ps = cn.prepareStatement(sql)) {
-                ps.setInt(1, newId);
-                ps.setString(2, title);
-                ps.setInt(3, userId);
-                ps.executeUpdate();
-            }
+            // MySQL: AUTO_INCREMENT handles thread_id
+            String sql = "INSERT INTO THREADS (thread_title, user_id) VALUES (?, ?)";
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setString(1, title);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new ServletException("エラーが発生しました", e);
         }
+
         res.sendRedirect("threads");
     }
 }

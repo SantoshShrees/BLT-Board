@@ -47,7 +47,7 @@ public class CreateAccountServlet extends HttpServlet {
             }
 
             //Insert new account
-            String sql = "INSERT INTO USERS (user_id, user_name, user_pass) VALUES (SEQ_USERS.NEXTVAL, ?, ?)";
+            String sql = "INSERT INTO USERS (user_name, user_pass) VALUES (?, ?)";
             try (PreparedStatement insertStmt = cn.prepareStatement(sql)) {
                 insertStmt.setString(1, username);
                 insertStmt.setString(2, password);
@@ -60,7 +60,9 @@ public class CreateAccountServlet extends HttpServlet {
             rd.forward(req, res);
 
         } catch (SQLException e) {
-            if (e.getMessage().contains("ORA-00001")) {
+            // MySQL duplicate key (e.g. UNIQUE INDEX on user_name)
+            if (e.getErrorCode() == 1062 ||
+                (e.getMessage() != null && e.getMessage().contains("Duplicate entry"))) {
                 req.setAttribute("error", "このユーザー名はすでに使われています。");
                 RequestDispatcher rd = req.getRequestDispatcher("createAccount.jsp");
                 rd.forward(req, res);

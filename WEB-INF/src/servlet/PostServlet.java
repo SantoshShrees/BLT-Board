@@ -33,7 +33,7 @@ public class PostServlet extends HttpServlet {
             // get posts inside this thread (with user_name)
             String sql = "SELECT p.post_id,p.user_id, u.user_name, p.post_number, p.post_content, p.post_date "
                         + "FROM POSTS p JOIN USERS u ON p.user_id = u.user_id "
-                        +"WHERE p.thread_id = ? ORDER BY p.post_id DESC";
+                        + "WHERE p.thread_id = ? ORDER BY p.post_id DESC";
             PreparedStatement stmt = cn.prepareStatement(sql);
             stmt.setInt(1, Integer.parseInt(threadId));
             ResultSet rs = stmt.executeQuery();
@@ -58,6 +58,7 @@ public class PostServlet extends HttpServlet {
         RequestDispatcher rd = req.getRequestDispatcher("post_list.jsp");
         rd.forward(req, res);
     }
+
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
     throws IOException, ServletException{
         //get tht content and the thread id to post something in it
@@ -70,17 +71,19 @@ public class PostServlet extends HttpServlet {
         try(Connection cn = Db.getConnection()){
             //to get post number
             int postNumber = 1;
-            String sqlNum = "SELECT NVL(MAX(post_number), 0) + 1 FROM POSTS WHERE thread_id = ?";
+            // NVL → IFNULL for MySQL
+            String sqlNum = "SELECT IFNULL(MAX(post_number), 0) + 1 FROM POSTS WHERE thread_id = ?";
             try (PreparedStatement psNum = cn.prepareStatement(sqlNum)) {
                 psNum.setInt(1, threadId);
                 ResultSet rs = psNum.executeQuery();
                 if (rs.next()) postNumber = rs.getInt(1);
             }
             //insert new post
+            // remove SEQ_POSTS.NEXTVAL and SYSDATE, use AUTO_INCREMENT + DEFAULT CURRENT_TIMESTAMP
             String sql = """
                 INSERT INTO POSTS
-                (post_id, thread_id, user_id, post_number, post_content, post_date)
-                VALUES (SEQ_POSTS.NEXTVAL, ?, ?, ?, ?, SYSDATE)
+                (thread_id, user_id, post_number, post_content)
+                VALUES (?, ?, ?, ?)
             """;
             try (PreparedStatement ps = cn.prepareStatement(sql)) {
                 ps.setInt(1, threadId);
@@ -90,7 +93,7 @@ public class PostServlet extends HttpServlet {
                 ps.executeUpdate();
             }
         }catch(Exception e){
-        throw new ServletException(e);
+            throw new ServletException(e);
         }
         res.sendRedirect("post?thread_id=" + threadId);
     }
